@@ -9,8 +9,8 @@ console.log (process.env.MYSQL_URI)
 
 async function app(yargsInput) {
     await sequelize.sync({alter:true});  
-    Movie.hasMany (Actor);
-    Actor.belongsTo (Movie)
+    Actor.hasMany (Movie);
+    Movie.belongsTo (Actor)
     if (yargsInput.create) {
         //place code to create movie here
         // await createMovie({
@@ -20,9 +20,9 @@ async function app(yargsInput) {
         // })
         const obj = {titles: [yargsInput.titleone,yargsInput.titletwo,yargsInput.titlethree],
             actor: yargsInput.actor}
-        const actor = await Actor.create(obj.actor)
-        obj.titles.forEach (title => {
-            actor.createMovie(title)
+        const actor = await Actor.create({name:obj.actor})
+        obj.titles.forEach (async (title) => {
+        await actor.createMovie({title:title})
         })
     } else if (yargsInput.read) {
         //place code to list all our movies here

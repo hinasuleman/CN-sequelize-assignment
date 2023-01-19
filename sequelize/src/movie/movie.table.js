@@ -7,10 +7,11 @@ const Movie = sequelize.define('Movie', {
         allowNull: false,
         unique: true,
     },
-    rating: {
-        type: DataTypes.INTEGER,
+    ActorId: {type:DataTypes.INTEGER}
+    // rating: {
+    //     type: DataTypes.INTEGER,
 
-    }
+    // }
 });
 
 module.exports = Movie;
