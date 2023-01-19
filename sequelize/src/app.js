@@ -1,15 +1,28 @@
+require("dotenv").config();
 const yargs = require("yargs");
 const sequelize = require("./db/connection");
 const {createMovie, listMovie, updateActor, updateDirector, deleteMovie} = require("./movie/function");
+const Movie = require("./movie/movie.table.js")
+const Actor = require("./movie/actor.table.js");
+const { HasMany } = require("sequelize");
+console.log (process.env.MYSQL_URI)
 
 async function app(yargsInput) {
     await sequelize.sync({alter:true});  
+    Movie.hasMany (Actor);
+    Actor.belongsTo (Movie)
     if (yargsInput.create) {
         //place code to create movie here
-        await createMovie({
-            title:yargsInput.title,
-            actor: yargsInput.actor,
-            director: yargsInput.director
+        // await createMovie({
+        //     titles: [yargsInput.titleone,yargsInput.titletwo,yargsInput.titlethree],
+        //     actor: yargsInput.actor
+           
+        // })
+        const obj = {titles: [yargsInput.titleone,yargsInput.titletwo,yargsInput.titlethree],
+            actor: yargsInput.actor}
+        const actor = await Actor.create(obj.actor)
+        obj.titles.forEach (title => {
+            actor.createMovie(title)
         })
     } else if (yargsInput.read) {
         //place code to list all our movies here
